@@ -1,3 +1,4 @@
+
 services:
   db:
     image: mysql:8.4
@@ -14,17 +15,19 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+
   app:
     build: .
     container_name: expense-tracker-app
     ports:
       - "8080:8080"
     environment:
-      DB_URL: jdbc:mysql://db:3306/expensedb
-      DB_USERNAME: expenseuser
-      DB_PASSWORD: expensepass
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/expensedb
+      SPRING_DATASOURCE_USERNAME: expenseuser
+      SPRING_DATASOURCE_PASSWORD: expensepass
     depends_on:
       db:
         condition: service_healthy
+
 volumes:
   expense_data:
