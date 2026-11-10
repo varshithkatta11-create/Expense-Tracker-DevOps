@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expense Tracker</title>
+<style>
+*{box-sizing:border-box}body{font-family:Arial,sans-serif;background:#f3f6fb;margin:0;color:#1f2937}
+main{max-width:900px;margin:35px auto;padding:20px}.hero{background:#183153;color:white;padding:25px;border-radius:14px}
+.card{background:white;padding:22px;margin-top:18px;border-radius:12px;box-shadow:0 3px 14px #0000000c}
+form.entry{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:10px}
+input,select,button{padding:11px;border:1px solid #cbd5e1;border-radius:7px;font-size:14px}
+button{background:#2563eb;color:white;border:0;cursor:pointer}button.delete{background:#dc2626;padding:7px 10px}
+table{width:100%;border-collapse:collapse;margin-top:12px}th,td{text-align:left;padding:12px;border-bottom:1px solid #e5e7eb}
+.total{font-size:28px;font-weight:bold;color:#16a34a}@media(max-width:700px){form.entry{grid-template-columns:1fr}main{margin:10px auto}}
+</style></head><body><main>
+<div class="hero"><h1>Expense Tracker</h1><p>Record and manage your daily expenses easily.</p></div>
+<div class="card"><div> TOTAL EXPENSES</div><div class="total">₹ <span th:text="${#numbers.formatDecimal(total,1,2)}">0.00</span></div></div>
+<div class="card"><h2>Add New Expense</h2>
+<form class="entry" action="/add" method="post">
+<input name="title" placeholder="Expense name" required>
+<select name="category"><option>Food</option><option>Travel</option><option>Shopping</option><option>Education</option><option>Bills</option><option>Other</option></select>
+<input name="amount" type="number" min="0.01" step="0.01" placeholder="Amount" required>
+<input name="expenseDate" type="date" required>
+<button type="submit">Add</button></form></div>
+<div class="card"><h2>Expense History</h2><table><thead><tr><th>Name</th><th>Category</th><th>Amount</th><th>Date</th><th>Action</th></tr></thead>
+<tbody><tr th:each="item : ${expenses}"><td th:text="${item.title}"></td><td th:text="${item.category}"></td>
+<td th:text="${'₹ ' + item.amount}"></td><td th:text="${item.expenseDate}"></td><td>
+<form th:action="@{/delete/{id}(id=${item.id})}" method="post"><button class="delete" type="submit">Delete</button></form></td></tr>
+<tr th:if="${#lists.isEmpty(expenses)}"><td colspan="5">No expenses added yet.</td></tr></tbody></table></div>
+</main></body></html>
